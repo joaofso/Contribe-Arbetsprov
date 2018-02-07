@@ -1,5 +1,6 @@
 package io.github.joaofso.bookstore.control;
 
+import io.github.joaofso.bookstore.aux.BookstoreException;
 import io.github.joaofso.bookstore.model.Book;
 
 /**
@@ -23,8 +24,9 @@ public interface BookList {
 	 * @param book The book to be added.
 	 * @param quantity The number of units to be added.
 	 * @return A boolean value indicating whether the book was added sucessfully.
+	 * @throws BookstoreException 
 	 */
-	public boolean add(Book book, int quantity);
+	public boolean add(Book book, int quantity) throws BookstoreException;
 
 	/**
 	 * Actually performs the purchase.

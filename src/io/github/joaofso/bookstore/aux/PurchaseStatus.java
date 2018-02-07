@@ -1,4 +1,4 @@
-package io.github.joaofso.bookstore.control;
+package io.github.joaofso.bookstore.aux;
 
 /**
  * This enumeration defines the possible status of the purchase of a book. The
