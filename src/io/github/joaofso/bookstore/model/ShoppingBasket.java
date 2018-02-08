@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class ShoppingBasket {
 
+	private User buyer;
 	private List<ShoppingBasketItem> items;
 	private BigDecimal total;
 

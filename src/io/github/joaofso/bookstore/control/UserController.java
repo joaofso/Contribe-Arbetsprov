@@ -100,6 +100,15 @@ public class UserController {
 		}
 		return false;
 	}
+	
+	/**
+	 * Retrieves an instance correspondent to the user with the referred username.
+	 * @param username The username of the user to be retrieved.
+	 * @return A user instance with the provided username or null if the user is not in the database.
+	 */
+	public User retrieveUser(String username) {
+		return this.userDAO.retrieveUser(username);
+	}
 
 	private String hashPassword(String password) {
 		// Add here the hashing mechanism for the user password! I don't add any since

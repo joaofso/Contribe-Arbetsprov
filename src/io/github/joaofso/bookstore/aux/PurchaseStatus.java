@@ -26,7 +26,7 @@ public enum PurchaseStatus {
 	 * Returns the numerical value of each purchase status.
 	 * @return 0 if the purchase was ok, 1 if the book is not in stock, or 2 if it does not exist.
 	 */
-	int getStatus() {
+	public int getStatus() {
 		return this.status;
 	}
 }
