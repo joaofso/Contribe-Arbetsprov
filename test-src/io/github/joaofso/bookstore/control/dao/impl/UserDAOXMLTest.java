@@ -16,7 +16,7 @@ import io.github.joaofso.bookstore.aux.BookstoreException;
 import io.github.joaofso.bookstore.control.dao.UserDAO;
 import io.github.joaofso.bookstore.model.User;
 
-class UserDAOXMLTest {
+public class UserDAOXMLTest {
 	
 	private final static String TEST_USER_FILE = "./TEST_UserDatabase.xml";
 

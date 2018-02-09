@@ -16,7 +16,7 @@ import io.github.joaofso.bookstore.aux.BookstoreException;
 import io.github.joaofso.bookstore.control.dao.BookDAO;
 import io.github.joaofso.bookstore.model.Book;
 
-class BookDAOXMLTest {
+public class BookDAOXMLTest {
 
 	private final static String TEST_BOOK_FILE = "./TEST_BookDatabase.xml";
 	private final static String INITIAL_FILE_SET = "./ContribeExerciseData.txt";

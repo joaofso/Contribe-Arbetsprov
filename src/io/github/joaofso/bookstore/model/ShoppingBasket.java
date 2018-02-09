@@ -78,6 +78,10 @@ public class ShoppingBasket {
 		this.total = this.total.subtract(book.getPrice());
 		return true;
 	}
+	
+	public List<ShoppingBasketItem> getItems(){
+		return this.items;
+	}
 
 	private ShoppingBasketItem getItem(Book book) {
 		for (ShoppingBasketItem shoppingBasketItem : items) {
@@ -96,5 +100,13 @@ public class ShoppingBasket {
 	 */
 	private boolean basketLimit() {
 		return false;
+	}
+
+	public int size() {
+		int size = 0;
+		for (ShoppingBasketItem shoppingBasketItem : items) {
+			size += shoppingBasketItem.getQuantity();
+		}
+		return size;
 	}
 }

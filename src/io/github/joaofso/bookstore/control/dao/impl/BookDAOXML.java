@@ -29,11 +29,11 @@ import io.github.joaofso.bookstore.model.Book;
  */
 public class BookDAOXML implements BookDAO {
 
-	private final String DEFAULT_BOOK_FILE = "./BookDatabase.xml";
-	private final String IT_IS_NOT_POSSIBLE_CREATE_FILE = "It is not possible to create the Book storage file in: ";
-	private final String INVALID_XML_FILE = "The XML file with the book database is invalid";
+	private final static String DEFAULT_BOOK_FILE = "./BookDatabase.xml";
+	private final static String IT_IS_NOT_POSSIBLE_CREATE_FILE = "It is not possible to create the Book storage file in: ";
+	private final static String INVALID_XML_FILE = "The XML file with the book database is invalid";
 
-	private File bookstoreDBFile = null;
+	private File bookstoreDBFile;
 
 	/**
 	 * Constructor of the DAO object. It receives a filepath to be the book
@@ -44,11 +44,13 @@ public class BookDAOXML implements BookDAO {
 	 * @throws BookstoreException Thrown when the system cannot access the file path due to, for
 	 *         instance lack of permission.
 	 */
-	public BookDAOXML(String filepath) throws BookstoreException {
+	protected BookDAOXML(String filepath) throws BookstoreException {
 		bookstoreDBFile = new File(filepath);
 		try {
 			if (!bookstoreDBFile.exists()) {
 				bookstoreDBFile.createNewFile();
+				Document dbDoc = new Document(new Element("books"));
+				this.saveFile(dbDoc);
 			}
 		} catch (IOException e) {
 			throw new BookstoreException(IT_IS_NOT_POSSIBLE_CREATE_FILE + filepath);
@@ -64,7 +66,7 @@ public class BookDAOXML implements BookDAO {
 	 *             instance lack of permission.
 	 */
 	public BookDAOXML() throws BookstoreException {
-		new BookDAOXML(DEFAULT_BOOK_FILE);
+		this(DEFAULT_BOOK_FILE);
 	}
 
 	/**
@@ -128,9 +130,6 @@ public class BookDAOXML implements BookDAO {
 	synchronized public boolean insertBook(Book book) {
 		try {
 			Document dbDoc = this.parseFile();
-			if (!dbDoc.hasRootElement()) {
-				dbDoc.setRootElement(new Element("bookstore"));
-			}
 			Element newBook = this.getXML(book);
 			dbDoc.getRootElement().addContent(newBook);
 
@@ -164,9 +163,6 @@ public class BookDAOXML implements BookDAO {
 	}
 
 	private Document parseFile() throws BookstoreException {
-		if (this.bookstoreDBFile.length() == 0) {
-			return new Document();
-		}
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {

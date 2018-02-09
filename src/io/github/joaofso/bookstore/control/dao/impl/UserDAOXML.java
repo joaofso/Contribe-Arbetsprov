@@ -27,12 +27,12 @@ import io.github.joaofso.bookstore.model.User;
  */
 public class UserDAOXML implements UserDAO {
 
-	private final String DEFAULT_USER_FILE = "./UserDatabase.xml";
+	private final static String DEFAULT_USER_FILE = "./UserDatabase.xml";
 
-	private final String IT_IS_NOT_POSSIBLE_CREATE_FILE = "It is not possible to create the User storage file in: ";
-	private final String INVALID_XML_FILE = "The XML file with the user database is invalid";
+	private final static String IT_IS_NOT_POSSIBLE_CREATE_FILE = "It is not possible to create the User storage file in: ";
+	private final static String INVALID_XML_FILE = "The XML file with the user database is invalid";
 
-	private File userDBFile = null;
+	private File userDBFile;
 
 	/**
 	 * Constructor of the DAO object. It receives a filepath to be the book
@@ -44,10 +44,13 @@ public class UserDAOXML implements UserDAO {
 	 *         instance lack of permission.
 	 */
 	public UserDAOXML(String filepath) throws BookstoreException {
-		userDBFile = new File(filepath);
+		this.userDBFile = new File(filepath);
 		try {
-			if (!userDBFile.exists()) {
-				userDBFile.createNewFile();
+			if (!this.userDBFile.exists()) {
+				this.userDBFile.createNewFile();
+
+				Document dbDoc = new Document(new Element("users"));
+				this.saveFile(dbDoc);
 			}
 		} catch (IOException e) {
 			throw new BookstoreException(IT_IS_NOT_POSSIBLE_CREATE_FILE + filepath);
@@ -63,7 +66,7 @@ public class UserDAOXML implements UserDAO {
 	 *             instance lack of permission.
 	 */
 	public UserDAOXML() throws BookstoreException {
-		new UserDAOXML(DEFAULT_USER_FILE);
+		this(DEFAULT_USER_FILE);
 	}
 
 	/**
@@ -71,12 +74,12 @@ public class UserDAOXML implements UserDAO {
 	 */
 	synchronized public boolean addUser(User newUser) {
 		try {
-			Document dbDoc = this.parseFile();
-			if (!dbDoc.hasRootElement()) {
-				dbDoc.setRootElement(new Element("users"));
+			if(this.retrieveUser(newUser.getUsername()) != null) {
+				return false;
 			}
 			Element userxml = this.getXML(newUser);
 			
+			Document dbDoc = this.parseFile();
 			dbDoc.getRootElement().addContent(userxml);
 
 			this.saveFile(dbDoc);
@@ -128,9 +131,6 @@ public class UserDAOXML implements UserDAO {
 	
 	
 	private Document parseFile() throws BookstoreException {
-		if (this.userDBFile.length() == 0) {
-			return new Document(new Element("users"));
-		}
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
 		try {
